@@ -4,18 +4,32 @@ import { Link } from 'react-router-dom'
 import {
 	loadingToggleAction, loginAction,
 } from '../../store/actions/AuthActions';
+import { auth } from "../../services/FireBase";
+import {signInWithEmailAndPassword} from "firebase/auth";
 
 // image
 //import logo from "../../images/logo-full.png";
 import loginbg from "../../images/pic1.png";
 
 function Login(props) {
-	const [email, setEmail] = useState('demo@example.com');
+	const [email, setEmail] = useState('');
 	let errorsObj = { email: '', password: '' };
 	const [errors, setErrors] = useState(errorsObj);
-	const [password, setPassword] = useState('123456');
+	const [password, setPassword] = useState('');
 
 	const dispatch = useDispatch();
+	const login = async () => {
+		try {
+		  const user = await signInWithEmailAndPassword(
+			auth,
+			setEmail,
+			setPassword,
+		  );
+		  console.log(user);
+		} catch (error) {
+		  console.log(error.message);
+		}
+	  };
 
 	function onLogin(e) {
 		e.preventDefault();
@@ -138,7 +152,7 @@ function Login(props) {
 											</div>
 										</div>
 										<div className="text-center form-group mb-3">
-											<button type="submit" className="btn btn-primary btn-block">
+											<button onClick={login} type="submit" className="btn btn-primary btn-block">
 												Sign In
 											</button>
 										</div>
